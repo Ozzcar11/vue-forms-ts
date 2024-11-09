@@ -1,0 +1,44 @@
+@use "./mixins/sizings" as *;
+
+:root {
+  font-family: Montserrat, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+}
+
+@mixin p3-regular {
+  @include text-xs;
+  font-weight: normal;
+}
+
+@mixin p2-medium {
+  @include text-base;
+  font-weight: medium;
+}
+
+@mixin p2-regular {
+  @include text-sm;
+  font-weight: normal;
+}
+
+@mixin p1-bold {
+  @include text-base;
+  font-weight: bold;
+}
+
+.p3-regular {
+  @include p3-regular;
+}
+
+.p2-medium {
+  @include p2-medium;
+}
+
+.p2-regular {
+  @include p2-regular;
+}
+
+.p2-bold {
+  @include p1-bold;
+}
