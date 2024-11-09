@@ -1,0 +1,4 @@
+@use "./mixins/mixins" as *;
+@include font-face("montserrat", normal, 400, "/fonts/montserrat-regular");
+@include font-face("montserrat", normal, 500, "/fonts/montserrat-medium");
+@include font-face("montserrat", normal, 700, "/fonts/montserrat-bold");
