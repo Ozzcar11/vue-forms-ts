@@ -8,6 +8,11 @@ const router = createRouter({
       name: 'home',
       component: () => import('../pages/form.vue'),
     },
+    {
+      path: '/preview',
+      name: 'preview',
+      component: () => import('../pages/preview.vue'),
+    },
   ],
 })
 
