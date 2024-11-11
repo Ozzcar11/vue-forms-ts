@@ -20,6 +20,7 @@ const router = useRouter();
 
 const buttonClasses = computed(() => [
   ns.block(),
+  ns.modifier(props.variant),
   ns.is("disabled", props.disabled),
 ]);
 
@@ -57,9 +58,6 @@ function buttonClickHandler(event: Event) {
 
 <style lang="scss">
 .ui-button {
-  color: #fff;
-  background-color: green;
-  padding: 12px 24px;
   width: auto;
   max-width: 100%;
   border-radius: 32px;
@@ -67,17 +65,60 @@ function buttonClickHandler(event: Event) {
   align-items: center;
   justify-content: center;
   border: none;
-  gap: 12px;
+  gap: 4px;
   cursor: pointer;
 
   @include text-base;
 
-  &:hover {
-    background-color: green;
+  &--primary {
+    @include p2-regular;
+    background-color: $colors-primary;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 32px;
   }
 
-  &:active {
-    background-color: green;
+  &--secondary {
+    @include p2-regular;
+    background-color: #fff;
+    border: 2px solid $colors-primary;
+    color: $colors-primary;
+    padding: 10px 20px;
+
+    &:hover {
+      background-color: $colors-purple-xs;
+    }
+
+    &:active {
+      background-color: $colors-purple-l;
+    }
+
+    &:focus {
+      border: 2px solid $colors-gray;
+    }
+  }
+
+  &--flat {
+    @include p2-regular;
+    color: $colors-primary;
+
+    &:focus {
+      box-shadow: 0 0 0 2px solid $colors-gray;
+      border-radius: 4px;
+    }
+
+    &:hover {
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 18px;
+        width: 100%;
+        height: 1px;
+        background-color: $colors-primary;
+      }
+    }
   }
 
   &__postfix-icon {
@@ -88,10 +129,6 @@ function buttonClickHandler(event: Event) {
   &__prefix-icon {
     width: 24px;
     height: 24px;
-  }
-
-  &:focus {
-    border-color: none;
   }
 
   &:disabled,

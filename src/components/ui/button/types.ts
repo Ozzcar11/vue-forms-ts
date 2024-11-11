@@ -1,10 +1,12 @@
 import { type RouteLocationRaw } from "vue-router";
 
+
 export type ButtonProps = {
   disabled?: boolean;
   prefixIcon?: string;
   postfixIcon?: string;
   to?: RouteLocationRaw;
+  variant?: "primary" | "secondary" | "flat";
 };
 
 export type ButtonEmits = {
@@ -16,4 +18,5 @@ export const ButtonPropsDefaults = {
   prefixIcon: "",
   postfixIcon: "",
   to: "",
+  variant: "primary"
 } as const;

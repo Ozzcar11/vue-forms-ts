@@ -2,7 +2,6 @@
 import { computed, ref } from "vue";
 import { useBEMNamespace } from "@/composables/useBEMNamespace";
 import { type InputProps, InputPropsDefaults } from "./types";
-import { UiIcon } from "@/components/ui/icon";
 
 const props = withDefaults(defineProps<InputProps>(), InputPropsDefaults);
 
@@ -21,23 +20,24 @@ const inputClasses = computed(() => [
   ns.is("disabled", props.disabled),
 ]);
 
-const showButtons = computed(() => !!modelValue.value && isFocused.value);
-
 function focusInput() {
   input.value?.focus();
 }
 
-function showPassword() {
-  typeValue.value = typeValue.value === "password" ? "text" : "password";
-}
+const labelHandler = computed(
+  () => !isFocused.value && !modelValue.value && !props.placeholder
+);
 </script>
 
 <template>
   <div :class="inputClasses">
-    <div v-if="label !== ''" class="ui-input__label">
-      {{ label }}
-    </div>
     <div tabindex="-1" class="ui-input__wrapper" @click="focusInput">
+      <div
+        class="ui-input__label"
+        :class="{ 'ui-input__label--active': labelHandler }"
+      >
+        {{ props.label }}
+      </div>
       <input
         ref="input"
         v-model="modelValue"
@@ -46,24 +46,9 @@ function showPassword() {
         @blur="isFocused = false"
         :disabled="disabled"
         :type="typeValue"
-        :placeholder="placeholder"
+        :placeholder="props.placeholder"
         :autocomplete="typeValue === 'password' ? 'current-password' : 'off'"
       />
-      <transition name="slide-fade">
-        <div v-if="showButtons" class="ui-input__btn">
-          <ui-icon
-            v-if="type === 'password'"
-            :icon="
-              typeValue === 'password'
-                ? 'mdi-eye-outline'
-                : 'mdi-eye-off-outline'
-            "
-            class="pointer"
-            @click="showPassword"
-            @mousedown.prevent
-          />
-        </div>
-      </transition>
     </div>
     <!-- <div
       v-if="hint !== '' || haveErrors"
@@ -80,74 +65,46 @@ function showPassword() {
   width: 100%;
 
   &__wrapper {
+    @include p2-regular;
+
     position: relative;
     display: flex;
+    flex-direction: column;
     width: 100%;
+    height: 56px;
     color: $colors-black;
-    line-height: 24px;
     background-color: $colors-white;
+    border: 1px solid $colors-gray-l;
     border-radius: 4px;
     outline: none;
     overflow: hidden;
-    padding: 22.5px 28px;
+    padding: 8px 16px;
+    cursor: text;
+    transition: box-shadow 0.2s ease;
 
     &:focus-within {
-      border: 2px solid #000;
+      box-shadow: 0px 0px 12px #0000001a;
     }
-
-    .ui-input--password & {
-      padding-right: 36px;
-    }
-
     .ui-input--error & {
       border: 1.5px solid #ff0000;
     }
   }
 
-  &__input {
-    &::placeholder {
-      color: $colors-gray;
-    }
-  }
-
   &__label {
+    @include p3-regular;
     color: $colors-gray;
-    margin-bottom: 8px;
 
-    @include text-sm;
-  }
-
-  &__hint {
-    color: gray;
-    font-size: 0.875rem;
-    margin-top: 8px;
-
-    @include text-sm;
-
-    &--error {
-      color: #a00;
-    }
-  }
-
-  &__prefix-icon {
-    margin-right: 10px;
-    width: 22px;
-    height: 22px;
-
-    svg {
-      fill: currentColor;
-    }
-  }
-
-  &__btn {
-    color: green;
     position: absolute;
-    right: 10px;
-    display: inline-flex;
+    top: 17px;
+    left: 16px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: top 0.2s ease, font-size 0.2s ease;
 
-    &-close {
-      margin-left: 6px;
-      cursor: pointer;
+    &--active {
+      @include p2-regular;
+
+      top: 50%;
     }
   }
 
@@ -155,6 +112,7 @@ function showPassword() {
     outline: none;
     width: 100%;
     border: none;
+    padding-top: 18px;
 
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
