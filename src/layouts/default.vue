@@ -10,9 +10,9 @@ defineOptions({
 <template>
   <div class="layout-default">
     <app-header class="layout-default__header" />
-    <div class="layout-default__content">
+    <main class="layout-default__content">
       <slot />
-    </div>
+    </main>
     <app-footer class="layout-default__footer" />
   </div>
 </template>
@@ -24,6 +24,8 @@ defineOptions({
   min-height: 100vh;
 
   &__content {
+    width: 616px;
+    margin: 30px auto 0px;
     flex-grow: 1;
   }
 }

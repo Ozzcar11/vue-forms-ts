@@ -9,22 +9,22 @@
 
 @mixin p3-regular {
   @include text-xs;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 @mixin p2-medium {
   @include text-base;
-  font-weight: medium;
+  font-weight: 500;
 }
 
 @mixin p2-regular {
   @include text-sm;
-  font-weight: normal;
+  font-weight: 400;
 }
 
 @mixin p1-bold {
   @include text-base;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .p3-regular {
