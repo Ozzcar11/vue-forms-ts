@@ -1,9 +1,17 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
+import { capitalize, computed } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();
+const layout = computed(
+  () => capitalize(route.meta.layout ?? "default") + "Layout"
+);
 </script>
 
 <template>
-  <RouterView />
+  <component :is="layout">
+    <router-view />
+  </component>
 </template>
 
-<style scoped></style>
+<style lang="scss"></style>
