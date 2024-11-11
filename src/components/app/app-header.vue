@@ -17,7 +17,7 @@
 <style lang="scss" scoped>
 .header {
   display: relative;
-  border-bottom: 1px solid $colors-gray-xs;
+  border-bottom: 1px solid $colors-gray-s;
 
   &__container {
     display: flex;
