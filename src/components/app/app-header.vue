@@ -3,9 +3,9 @@
 <template>
   <header class="header">
     <div class="header__container">
-      <div class="header__logo">
+      <router-link to="/" class="header__logo">
         <img src="/icons/logo.svg" alt="Alef Logo" />
-      </div>
+      </router-link>
       <div class="header__menu">
         <router-link to="/" class="header__link">Форма</router-link>
         <router-link to="/preview" class="header__link">Превью</router-link>
@@ -27,6 +27,9 @@
 
   &__logo {
     position: absolute;
+    display: flex;
+    align-items: center;
+    height: 70px;
   }
 
   &__link {
