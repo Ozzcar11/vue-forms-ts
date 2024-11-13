@@ -18,6 +18,7 @@ const isFocused = ref(false);
 const inputClasses = computed(() => [
   ns.block(),
   ns.is("disabled", props.disabled),
+  ns.is("error", !!props.errorMessages?.length),
 ]);
 
 function focusInput() {
@@ -31,6 +32,9 @@ const labelHandler = computed(
 
 <template>
   <div :class="inputClasses">
+    <div v-if="errorMessages?.length" class="ui-input__error">
+      {{ errorMessages[0] }}
+    </div>
     <div tabindex="-1" class="ui-input__wrapper" @click="focusInput">
       <div
         class="ui-input__label"
@@ -50,18 +54,12 @@ const labelHandler = computed(
         :autocomplete="typeValue === 'password' ? 'current-password' : 'off'"
       />
     </div>
-    <!-- <div
-      v-if="hint !== '' || haveErrors"
-      class="ui-input__hint"
-      :class="{ 'ui-input__hint--error': haveErrors }"
-    >
-      {{ haveErrors ? errorMessages?.[0] : hint }}
-    </div> -->
   </div>
 </template>
 
 <style lang="scss">
 .ui-input {
+  position: relative;
   width: 100%;
 
   &__wrapper {
@@ -80,7 +78,7 @@ const labelHandler = computed(
     overflow: hidden;
     padding: 8px 16px;
     cursor: text;
-    transition: box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 
     &:focus-within {
       box-shadow: 0px 0px 12px #0000001a;
@@ -88,6 +86,10 @@ const labelHandler = computed(
     .ui-input--error & {
       border: 1.5px solid #ff0000;
     }
+  }
+
+  &__input {
+    transition: all 0.2s ease;
   }
 
   &__label {
@@ -108,6 +110,11 @@ const labelHandler = computed(
     }
   }
 
+  &__error {
+    @include p2-regular;
+    color: $colors-red;
+  }
+
   input {
     outline: none;
     width: 100%;
@@ -122,6 +129,16 @@ const labelHandler = computed(
     &::-ms-reveal {
       display: none;
     }
+  }
+}
+
+.is-error {
+  .ui-input__wrapper {
+    background-color: $colors-red-xs;
+  }
+
+  .ui-input__input {
+    background-color: $colors-red-xs;
   }
 }
 </style>

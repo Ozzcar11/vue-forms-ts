@@ -1,21 +1,34 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { UiInput, UiButton } from "@/components/ui";
 import { v4 as uuid } from "uuid";
 import { useFormStore } from "@/store/form";
+import { useVuelidate } from "@vuelidate/core";
+import { maxValue, maxLength, required, onlyCirilic } from "@/utils/validators";
+import { useToast } from "@/composables/useToast";
+import type { PersonalDataType, ChildrenType } from "@/types/personal-data";
+import formChild from "@/modules/form/form-child.vue";
 
 const formStore = useFormStore();
+const { showToast } = useToast();
 
-const personalData = ref({
+const personalData = ref<PersonalDataType>({
   name: "",
   age: null,
   childrens: [],
 });
 
-const child = {
+const child: ChildrenType = {
   name: "",
   age: null,
 };
+
+const rules = computed(() => ({
+  name: { required, maxValue: maxLength(50), onlyCirilic },
+  age: { required, maxValue: maxValue(100) },
+}));
+
+const v = useVuelidate(rules, personalData);
 
 function addChild() {
   personalData.value.childrens.push({ ...child, id: uuid() });
@@ -24,17 +37,32 @@ function addChild() {
 function removeChild(index: number) {
   personalData.value.childrens.splice(index, 1);
 }
+
+async function saveForm() {
+  const isCorrect = await v.value.$validate();
+  if (!isCorrect) return;
+
+  formStore.updatePersonalData(personalData.value);
+  showToast("Данные успешно сохранены");
+}
 </script>
 
 <template>
   <div class="form">
     <div class="form__section">
       <h3 class="form__title">Персональные данные</h3>
-      <ui-input v-model="personalData.name" class="form__input" label="Имя" />
+      <ui-input
+        v-model="personalData.name"
+        class="form__input"
+        label="Имя"
+        :errorMessages="v.name.$errors.map((e) => e.$message)"
+      />
       <ui-input
         v-model="personalData.age"
+        type="number"
         class="form__input"
         label="Возраст"
+        :errorMessages="v.age.$errors.map((e) => e.$message)"
       />
     </div>
     <div class="form__section">
@@ -49,23 +77,21 @@ function removeChild(index: number) {
           Добавить ребёнка
         </ui-button>
       </div>
-      <div
+      <form-child
         v-for="(child, index) in personalData.childrens"
         :key="child.id"
-        class="form__children"
-      >
-        <ui-input v-model="child.name" label="Имя" />
-        <ui-input v-model="child.age" label="Возраст" />
-        <ui-button variant="flat" @click="removeChild(index)">
-          Удалить
-        </ui-button>
-      </div>
+        v-model:name="child.name"
+        v-model:age="child.age"
+        @remove="removeChild(index)"
+      />
       <ui-button
         class="form__button"
         variant="primary"
-        @click="formStore.updatePersonalData(personalData)"
-        >Сохранить</ui-button
+        @click="saveForm"
+        :disabled="!!v.$errors.length"
       >
+        Сохранить
+      </ui-button>
     </div>
   </div>
 </template>
@@ -99,12 +125,6 @@ function removeChild(index: number) {
 
   &__button {
     margin-top: 30px;
-  }
-
-  &__children {
-    display: flex;
-    gap: 18px;
-    margin-bottom: 10px;
   }
 
   &__input {
