@@ -113,7 +113,7 @@ function buttonClickHandler(event: Event) {
         content: "";
         position: absolute;
         left: 0;
-        bottom: 18px;
+        bottom: 0;
         width: 100%;
         height: 1px;
         background-color: $colors-primary;
@@ -133,8 +133,7 @@ function buttonClickHandler(event: Event) {
 
   &:disabled,
   &[disabled] {
-    color: #fff;
-    background-color: gray;
+    background-color: $colors-primary-disabled;
   }
 
   &.is-disabled {
